@@ -1,0 +1,92 @@
+[
+	{
+		"id": 0,
+		"title": "product1",
+		"description": "description1",
+		"price": 1000,
+		"thumbnail": "path",
+		"code": "code1",
+		"stock": 10
+	},
+	{
+		"id": 1,
+		"title": "product2",
+		"description": "description2",
+		"price": 1000,
+		"thumbnail": "path",
+		"code": "code2",
+		"stock": 10
+	},
+	{
+		"id": 2,
+		"title": "product3",
+		"description": "description3",
+		"price": 1000,
+		"thumbnail": "path",
+		"code": "code3",
+		"stock": 10
+	},
+	{
+		"id": 3,
+		"title": "product4",
+		"description": "description4",
+		"price": 1000,
+		"thumbnail": "path",
+		"code": "code4",
+		"stock": 10
+	},
+	{
+		"id": 4,
+		"title": "product5",
+		"description": "description5",
+		"price": 1000,
+		"thumbnail": "path",
+		"code": "code5",
+		"stock": 10
+	},
+	{
+		"id": 5,
+		"title": "product6",
+		"description": "description6",
+		"price": 1000,
+		"thumbnail": "path",
+		"code": "code6",
+		"stock": 10
+	},
+	{
+		"id": 6,
+		"title": "product7",
+		"description": "description7",
+		"price": 1000,
+		"thumbnail": "path",
+		"code": "code7",
+		"stock": 10
+	},
+	{
+		"id": 7,
+		"title": "product8",
+		"description": "description8",
+		"price": 1000,
+		"thumbnail": "path",
+		"code": "code8",
+		"stock": 10
+	},
+	{
+		"id": 8,
+		"title": "product9",
+		"description": "description9",
+		"price": 1000,
+		"thumbnail": "path",
+		"code": "code9",
+		"stock": 10
+	},
+	{
+		"id": 9,
+		"title": "product10",
+		"description": "description10",
+		"price": 1000,
+		"thumbnail": "path",
+		"code": "code10",
+		"stock": 10
+	}
+]
