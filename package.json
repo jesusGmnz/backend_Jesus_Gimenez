@@ -1,0 +1,19 @@
+{
+  "name": "backend_jesus_gimenez",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "express-handlebars": "^8.0.1",
+    "nodemon": "^3.1.4",
+    "socket.io": "^4.7.5"
+  }
+}
