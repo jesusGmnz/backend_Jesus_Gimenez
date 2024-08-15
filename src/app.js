@@ -1,23 +1,14 @@
 import express from "express";
-import ProductManager from "./ProductsManager.js";
+import router from "./routes/product.router.js";
 
-
-const PM = new ProductManager("./src/myfile/products.json");
 const app = express();
 const PORT = 8080
 
-app.get("/api/products", async(req,res)=>{
-    const{limit} = req.query
-    const productsList = await PM.getProducts(limit)
-    res.send(productsList)
-})
+app.use(express.json())
+app.use(express.urlencoded({ extended:true}))
 
-app.get("/api/products/:pid",async(req,res)=>{
-    console.log(req.params);
-    const {pid} = req.params
-    const productId = await PM.getProductByID(parseInt(pid))
-    res.send(productId)
-})
+app.use("/api/products",router)
+app.use("/api/carts",router)
 
 app.listen(PORT, ()=>{
     try {

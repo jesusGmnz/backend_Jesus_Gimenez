@@ -1,107 +1,151 @@
 import fs from "fs"
 
 export default class ProductManager {
-    #id = 1; //* Atributo privado
     constructor(path) {
         this.products = [];
         this.path = path;
     }
 
-    async getProducts(limit){
+    async getProducts(objectquery) {
+        const { limit } = objectquery;
         try {
-            // Leer el archivo de productos
-            const data = await fs.promises.readFile(this.path, 'utf-8');
-
-            // Convertir el contenido del archivo JSON a un array de productos
-            const products = JSON.parse(data);
-            const productsLimit = products.slice(0,parseInt(limit))
-            return productsLimit
-        } catch (error) {
-            console.error("Error al leer los productos", error);
-            return [];
-        }
-    }
-
-    async addProduct({ title, description, price, thumbnail, code, stock }) {
-        try {
-            const codeExists = this.products.some(product => product.code === code);
-            if (codeExists) {
-                throw new Error(`Producto con el code '${code}' ya existe.`)
-            }
-            
-            const newProduct = {
-                id: this.#id++,
-                title,
-                description,
-                price,
-                thumbnail,
-                code,
-                stock
-            };
-
-            this.products.push(newProduct);
-
-            await fs.promises.writeFile(this.path, JSON.stringify(this.products, null, "\t"));
-
-        } catch (error) {
-            console.error("Error no se pudo agregar el producto", error);
-        }
-    }
-
-    async getProductByID(id){
-        try {
-            // Leer el archivo de productos
-            const data = await fs.promises.readFile(this.path, 'utf-8');
-
-            // Convertir el contenido del archivo JSON a un array de productos
-            const products = JSON.parse(data);
-
-            // Buscar el producto por ID
-            const product = products.find(prod => prod.id === id);
-            return product;
-        } catch (error) {
-            console.error(`Error al buscar el producto con ID ${id}`, error);
-            return null;
-        }
-    }
-
-    async updateProduct(id, update){
-        try {
-            const data = await fs.readFile(this.path, 'utf-8');
-            let products = JSON.parse(data);
-
-            const index = products.findIndex(product => product.id === id);
-            if (index !== -1) {
-                products[index] = { ...products[index], ...update };
-                await fs.writeFile(this.path, JSON.stringify(products, null, "\t"));
-                return true;
+            if (fs.existsSync(this.path)) {
+                const products = await fs.promises.readFile(this.path, "utf-8");
+                const productList = JSON.parse(products);
+                if (limit) {
+                    const limitProducts = productList.slice(0, parseInt(limit));
+                    return limitProducts;
+                } else {
+                    return productList;
+                }
             } else {
-                console.error(`No se encontró el producto con ID ${id}`);
-                return false;
+                return [];
             }
         } catch (error) {
-            console.error(`Error al actualizar el producto con ID ${id}`, error);
-            return false;
+            throw new Error(error);
         }
-    }
+    };
 
-    async deleteProduct(id){
+    addProduct = async (objbody) => {
+        const { title, description, price, thumbnail, category, status = true, code, stock } = objbody
+        if (!title || !description || !price || !category || !code || !status || !stock) {
+            console.error("INGRESE TODOS LOS DATOS DEL PRODUCTO");
+            return;
+        } else {
+            const products = await this.getProducts({})
+            const codeExist = products.find(
+                (product) => product.code === code
+            );
+            if (codeExist) {
+                console.error("EL CODIGO DEL PRODUCTO QUE DESEA AGREGAR ES REPETIDO");
+                return;
+            } else {
+                const id = await this.generateId();
+                const productnew = {
+                    id,
+                    title,
+                    description,
+                    price,
+                    category,
+                    status,
+                    thumbnail,
+                    code,
+                    stock,
+                };
+                products.push(productnew);
+                await fs.promises.writeFile(this.path,
+                    JSON.stringify(products, null, 2)
+                );
+            }
+        }
+    };
+
+    async getProductbyId(objectparams) {
+        const { pid } = objectparams
         try {
-            const data = await fs.readFile(this.path, 'utf-8');
-            let products = JSON.parse(data);
-
-            // Filtrar los productos para excluir el que tenga el ID proporcionado
-            products = products.filter(product => product.id !== id);
-
-            // Escribir los productos actualizados en el archivo JSON (sin el producto eliminado)
-            await fs.writeFile(this.path, JSON.stringify(products, null, "\t"));
-            return true;
+            if (fs.existsSync(this.path)) {
+                const products = await this.getProducts({});
+                const found = products.find((product) => product.id === parseInt(pid));
+                if (found) {
+                    return found;
+                } else {
+                    throw new Error("Producto no existe");
+                }
+            } else {
+                throw new Error("Product file not found");
+            }
         } catch (error) {
-            console.error(`Error al eliminar el producto con ID ${id}`, error);
-            return false;
+            throw new Error(error);
         }
-    }
+    };
 
-    
+    async generateId() {
+        try {
+            if (fs.existsSync(this.path)) {
+                const products = await fs.promises.readFile(this.path, "utf-8");
+                const productList = JSON.parse(products);
+                const counter = productList.length;
+                if (counter == 0) {
+                    return 1;
+                } else {
+                    return productList[counter - 1].id + 1;
+                }
+            }
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    async updateProduct(objparams, objbody){
+        const { pid } = objparams
+        const { title, description, price, category, thumbnail, status, code, stock } = objbody
+        if (title === undefined || description === undefined || price === undefined || category === undefined || status === undefined || code === undefined || stock === undefined) {
+            console.error("INGRESE TODOS LOS DATOS DEL PRODUCTO PARA SU ACTUALIZACION");
+            return;
+        } else {
+            const products = await this.getProducts({});
+            const codeExist = products.find((i) => i.code === code);
+            if (codeExist) {
+                console.error(
+                    "EL CODIGO DEL PRODUCTO QUE DESEA ACTUALIZAR ES REPETIDO"
+                );
+                return;
+            } else {
+                const products = await this.getProducts({});
+                const newProductsList = products.map((elemento) => {
+                    if (elemento.id === parseInt(pid)) {
+                        const updatedProduct = {
+                            ...elemento,
+                            title,
+                            description,
+                            price,
+                            category,
+                            status,
+                            thumbnail,
+                            code,
+                            stock
+                        };
+                        return updatedProduct;
+                    } else {
+                        return elemento;
+                    }
+                });
+                await fs.promises.writeFile(this.path, JSON.stringify(newProductsList, null, 2));
+
+            }
+        }
+    };
+
+    async deleteProduct(objparams){
+        const { pid } = objparams
+        const products = await this.getProducts({});
+        const productFound = products.filter(
+            (elemento) => elemento.id !== parseInt(pid)
+        );
+        await fs.promises.writeFile(
+            this.path,
+            JSON.stringify(productFound, null, 2)
+        );
+    };
 }
 

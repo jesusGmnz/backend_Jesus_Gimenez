@@ -1,23 +1,5 @@
 [
   {
-    "id": 1,
-    "title": "product1",
-    "description": "decription1",
-    "price": 1000,
-    "thumbnail": "url",
-    "code": "code1",
-    "stock": 100
-  },
-  {
-    "id": 2,
-    "title": "product3",
-    "description": "decription2",
-    "price": 1000,
-    "thumbnail": "url",
-    "code": "code2",
-    "stock": 100
-  },
-  {
     "id": 3,
     "title": "product4",
     "description": "decription3",
@@ -34,5 +16,49 @@
     "thumbnail": "url",
     "code": "code4",
     "stock": 100
+  },
+  {
+    "id": 5,
+    "title": "product6",
+    "description": "description6",
+    "price": 120,
+    "category": "shoes",
+    "status": true,
+    "thumbnail": "url",
+    "code": "code6",
+    "stock": 1500
+  },
+  {
+    "id": 6,
+    "title": "product7",
+    "description": "description7",
+    "price": 120,
+    "category": "shoes",
+    "status": true,
+    "thumbnail": "url",
+    "code": "code7",
+    "stock": 1500
+  },
+  {
+    "id": 7,
+    "title": "product8A",
+    "description": "description8A",
+    "price": 120,
+    "category": "shoes",
+    "status": true,
+    "thumbnail": "url",
+    "code": "code11",
+    "stock": 1500
+  },
+  {
+    "id": 8,
+    "title": "product9",
+    "description": "description9",
+    "price": 120,
+    "category": "shoes",
+    "status": true,
+    "thumbnail": "url",
+    "code": "code9",
+    "stock": 1500
   }
 ]
