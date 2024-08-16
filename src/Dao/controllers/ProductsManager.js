@@ -1,22 +1,22 @@
 import fs from "fs"
 
-export default class ProductManager {
+export default class ProductsManager {
     constructor(path) {
-        this.products = [];
-        this.path = path;
+        (this.path = path),
+            (this.products = []);
     }
 
-    async getProducts(objectquery) {
-        const { limit } = objectquery;
+    async getProducts(info) {
         try {
+            const { limit } = info;
             if (fs.existsSync(this.path)) {
-                const products = await fs.promises.readFile(this.path, "utf-8");
-                const productList = JSON.parse(products);
+                const productlist = await fs.promises.readFile(this.path, "utf-8");
+                const productlistJs = JSON.parse(productlist);
                 if (limit) {
-                    const limitProducts = productList.slice(0, parseInt(limit));
+                    const limitProducts = productlistJs.slice(0, parseInt(limit));
                     return limitProducts;
                 } else {
-                    return productList;
+                    return productlistJs;
                 }
             } else {
                 return [];
@@ -26,8 +26,22 @@ export default class ProductManager {
         }
     };
 
-    addProduct = async (objbody) => {
-        const { title, description, price, thumbnail, category, status = true, code, stock } = objbody
+    async getProductsView() {
+        try {
+            if (fs.existsSync(this.path)) {
+                const productlist = await fs.promises.readFile(this.path, "utf-8");
+                const productlistJs = JSON.parse(productlist);
+                return productlistJs;
+            } else {
+                return [];
+            }
+        } catch (error) {
+            throw new Error(error);
+        }
+    };
+
+    addProduct = async (obj) => {
+        const { title, description, price, thumbnail, category, status = true, code, stock } = obj
         if (!title || !description || !price || !category || !code || !status || !stock) {
             console.error("INGRESE TODOS LOS DATOS DEL PRODUCTO");
             return;
@@ -60,9 +74,9 @@ export default class ProductManager {
         }
     };
 
-    async getProductbyId(objectparams) {
-        const { pid } = objectparams
+    async getProductbyId(id) {
         try {
+            const { pid } = id
             if (fs.existsSync(this.path)) {
                 const products = await this.getProducts({});
                 const found = products.find((product) => product.id === parseInt(pid));
@@ -96,9 +110,9 @@ export default class ProductManager {
         }
     };
 
-    async updateProduct(objparams, objbody){
-        const { pid } = objparams
-        const { title, description, price, category, thumbnail, status, code, stock } = objbody
+    async updateProduct(id, obj) {
+        const { pid } = id
+        const { title, description, price, category, thumbnail, status, code, stock } = obj
         if (title === undefined || description === undefined || price === undefined || category === undefined || status === undefined || code === undefined || stock === undefined) {
             console.error("INGRESE TODOS LOS DATOS DEL PRODUCTO PARA SU ACTUALIZACION");
             return;
@@ -136,16 +150,14 @@ export default class ProductManager {
         }
     };
 
-    async deleteProduct(objparams){
-        const { pid } = objparams
-        const products = await this.getProducts({});
-        const productFound = products.filter(
-            (elemento) => elemento.id !== parseInt(pid)
+    async deleteProduct(id) {
+        const allproducts = await this.getProducts({});
+        const productswithoutfound = allproducts.filter(
+            (elemento) => elemento.id !== parseInt(id)
         );
-        await fs.promises.writeFile(
-            this.path,
-            JSON.stringify(productFound, null, 2)
+        await fs.promises.writeFile(this.path, JSON.stringify(productswithoutfound, null, 2)
         );
+        return "Producto Eliminado"
     };
 }
 

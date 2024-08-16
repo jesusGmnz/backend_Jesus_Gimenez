@@ -1,0 +1,13 @@
+[
+  {
+    "id": 2,
+    "title": "jabon de manzana",
+    "description": "aroma a manazana",
+    "price": "1000",
+    "category": "jabon en barra",
+    "status": true,
+    "thumbnail": "https://i.ibb.co/nngfHbZ/puma.png|",
+    "code": "code002",
+    "stock": "100"
+  }
+]

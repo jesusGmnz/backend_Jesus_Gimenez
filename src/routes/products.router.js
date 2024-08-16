@@ -1,25 +1,23 @@
 import { Router } from "express";
-import ProductManager from "../ProductsManager.js";
+import ProductManager from "../Dao/controllers/ProductsManager.js";
 import { __dirname } from "../utils.js";
 
 
-const PM = new ProductManager(__dirname + "/myfile/products.json");
-const router = Router();
+const PM = new ProductManager(__dirname + "/database/products.json");
+const routerP = Router();
 
 //RUTAS
-router.get("/", async (req, res) => {
-    const productlist = await PM.getProducts(req.query)
-    res.json(productlist)
+routerP.get("/",async (req,res) => {
+    const products = await PM.getProducts(req.query)
+    res.send({products})
 })
 
-
-router.get("/:pid", async (req, res) => {
+routerP.get("/:pid", async (req, res) => {
     const productfound = await PM.getProductbyId(req.params)
     res.json(productfound)
 })
 
-// Ruta para agregar un nuevo producto
-router.post("/", async (req, res) => {
+routerP.post("/", async (req, res) => {
 
     try {
         const newproduct = await PM.addProduct(req.body);
@@ -29,8 +27,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-// Ruta para actualizar un producto
-router.put("/:pid", async (req, res) => {
+routerP.put("/:pid", async (req, res) => {
     try {
         const updatedproduct = await PM.updateProduct(req.params, req.body);
         res.json({ status: "success", updatedproduct });
@@ -39,8 +36,7 @@ router.put("/:pid", async (req, res) => {
     }
 });
 
-// Ruta para eliminar un producto
-router.delete("/:pid", async (req, res) => {
+routerP.delete("/:pid", async (req, res) => {
     try {
         const deleteproduct = await PM.deleteProduct(req.params);
         res.json({ status: "success", deleteproduct });
@@ -49,4 +45,4 @@ router.delete("/:pid", async (req, res) => {
     }
 });
 
-export default router
+export default routerP
