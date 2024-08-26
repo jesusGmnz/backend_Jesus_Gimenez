@@ -1,9 +1,10 @@
 import { Router } from 'express';
-import ProductsManager from '../Dao/controllers/ProductsManager.js';
+import ProductManager from '../Dao/controllers/ProductsManagerMongo.js';
 import { __dirname } from "../utils.js"
 
-const PM = new ProductsManager(__dirname+'/database/products.json')
+const PM =new ProductManager()
 const routerV = Router()
+
 
 routerV.get("/",async(req,res)=>{
     const listadeproductos=await PM.getProductsView()
@@ -11,7 +12,11 @@ routerV.get("/",async(req,res)=>{
 })
 
 routerV.get("/realtimeproducts",(req,res)=>{
-    res.render("realtimeproducts")
+res.render("realtimeproducts")
+})
+
+routerV.get("/chat",(req,res)=>{
+    res.render("chat")
 })
 
 export default routerV

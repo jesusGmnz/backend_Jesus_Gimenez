@@ -9,5 +9,16 @@
     "thumbnail": "https://i.ibb.co/nngfHbZ/puma.png|",
     "code": "code002",
     "stock": "100"
+  },
+  {
+    "id": 3,
+    "title": "jabon de lavanda",
+    "description": "aroma a lavanda",
+    "price": "1000",
+    "category": "jabon en barra",
+    "status": true,
+    "thumbnail": "https://",
+    "code": "code003",
+    "stock": "1000"
   }
 ]

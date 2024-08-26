@@ -6,6 +6,7 @@ import routerP from "./routes/products.router.js";
 import routerC from "./routes/carts.router.js"
 import routerV from "./routes/views.router.js";
 import socketProducts from "./listeners/socketProducts.js";
+import connectDB from "./config/configServer.js";
 
 const app = express();
 const PORT = 8080
@@ -19,10 +20,11 @@ app.set("view engine","handlebars")
 app.use(express.json())
 app.use(express.urlencoded({ extended:true}))
 
-app.use("/api/products",routerP)
+app.use("/api/",routerP)
 app.use("/api/carts",routerC)
 app.use('/', routerV);
 
+connectDB()
 const httpServer = app.listen(PORT, ()=>{
     try {
         console.log(`server listening on port ${PORT}`);

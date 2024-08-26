@@ -1,24 +1,25 @@
-import ProductsManager from "../Dao/controllers/ProductsManager.js";
+import ProductManager from "../Dao/controllers/ProductsManagerMongo.js";
 import { __dirname } from "../utils.js";
-const pm = new ProductsManager(__dirname + '/database/products.json')
+
+const PM = new ProductManager();
 
 const socketProducts = (socketServer) => {
     socketServer.on("connection", async (socket) => {
         console.log("client connected con ID:", socket.id)
-        const listadeproductos = await pm.getProductsView()
+        const listadeproductos = await PM.getProductsView()
 
         socketServer.emit("enviodeproducts", listadeproductos)
 
         socket.on("addProduct", async (obj) => {
-            await pm.addProduct(obj)
-            const listadeproductos = await pm.getProductsView()
+            await PM.addProduct(obj)
+            const listadeproductos = await PM.getProductsView()
             socketServer.emit("enviodeproducts", listadeproductos)
         })
 
         socket.on("deleteProduct", async (id) => {
 
-            await pm.deleteProduct(id)
-            const listadeproductos = await pm.getProductsView()
+            await PM.deleteProduct(id)
+            const listadeproductos = await PM.getProductsView()
             socketServer.emit("enviodeproducts", listadeproductos)
         })
 
